@@ -1,0 +1,9 @@
+---
+# This playbook will install and config mysql.
+
+- include: install.yml
+
+- include: config.yml
+
+- include: restart.yml
+

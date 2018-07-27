@@ -1,0 +1,6 @@
+---
+- name: Install mariadb server
+  yum: name={{ item }} state=installed
+  with_items:
+    - mariadb-server
+

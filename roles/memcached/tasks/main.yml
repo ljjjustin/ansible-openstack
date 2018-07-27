@@ -1,0 +1,18 @@
+---
+# This playbook will install and config memcached.
+
+- name: Install memcached
+  yum: name={{ item }} state=installed
+  with_items:
+    - memcached
+
+- name: Configure memcached
+  template: src=memcached.j2 dest=/etc/sysconfig/memcached
+  register: memcached_config
+
+- name: Enable memcached service
+  service: name=memcached state=started enabled=yes
+
+- name: Restart memcached if config changed
+  service: name=memcached state=restarted
+  when: memcached_config.changed == true

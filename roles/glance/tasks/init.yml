@@ -1,0 +1,67 @@
+---
+- name: ensure database is synchronized
+  command: "glance-manage db_sync"
+  become: yes
+  become_user: glance
+  changed_when: false
+
+- name: ensure glance project
+  os_project:
+    cloud: default
+    state: present
+    name: openstack
+    description: "openstack services"
+    domain_id: default
+    enabled: true
+
+- name: ensure glance user
+  os_user:
+    cloud: default
+    state: present
+    name: "{{ glance_os_username }}"
+    password: "{{ glance_os_password }}"
+    domain: default
+    default_project: openstack
+
+- name: ensure glance user is admin role
+  os_user_role:
+    cloud: default
+    state: present
+    user: "{{ glance_os_username }}"
+    role: "admin"
+    project: "openstack"
+
+- name: ensure glance service
+  os_keystone_service:
+    cloud: default
+    state: present
+    name: glance
+    service_type: image
+    description: "OpenStack Image Service"
+
+- name: ensure glance public endpoint
+  os_keystone_endpoint:
+    cloud: default
+    service: glance
+    interface: public
+    state: present
+    region: "{{ region_name }}"
+    url: "{{ glance_public_url }}"
+
+- name: ensure glance admin endpoint
+  os_keystone_endpoint:
+    cloud: default
+    service: glance
+    interface: admin
+    state: present
+    region: "{{ region_name }}"
+    url: "{{ glance_admin_url }}"
+
+- name: ensure glance internal endpoint
+  os_keystone_endpoint:
+    cloud: default
+    service: glance
+    interface: internal
+    state: present
+    region: "{{ region_name }}"
+    url: "{{ glance_internal_url }}"

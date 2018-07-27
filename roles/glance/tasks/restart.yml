@@ -1,0 +1,24 @@
+---
+- name: enable glance api service
+  service:
+    name: openstack-glance-api
+    state: started
+    enabled: yes
+
+- name: restart glance api if config changed
+  service:
+    name: openstack-glance-api
+    state: restarted
+  when: glance_api_config.changed == true
+
+- name: start glance registry
+  service:
+    name: openstack-glance-registry
+    state: started
+    enabled: yes
+
+- name: restart glance registry
+  service:
+    name: openstack-glance-registry
+    state: restarted
+  when: glance_registry_config.changed == true

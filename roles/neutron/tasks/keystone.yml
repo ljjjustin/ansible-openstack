@@ -1,0 +1,57 @@
+---
+- name: ensure neutron project
+  os_project:
+    cloud: default
+    state: present
+    name: openstack
+    description: "openstack services"
+    domain_id: default
+    enabled: true
+
+- name: ensure neutron user
+  os_user:
+    cloud: default
+    state: present
+    name: "{{ neutron_os_username }}"
+    password: "{{ neutron_os_password }}"
+    domain: default
+    default_project: openstack
+
+- name: ensure neutron user is admin role
+  os_user_role:
+    cloud: default
+    user: "{{ neutron_os_username }}"
+    role: "admin"
+    project: "openstack"
+
+- name: ensure neutron service
+  os_keystone_service:
+    cloud: default
+    state: present
+    name: neutron
+    service_type: network
+    description: "OpenStack Network Service"
+
+- name: ensure neutron public endpoint
+  os_keystone_endpoint:
+    cloud: default
+    service: neutron
+    interface: public
+    region: "{{ region_name }}"
+    url: "{{ neutron_public_url }}"
+
+- name: ensure neutron admin endpoint
+  os_keystone_endpoint:
+    cloud: default
+    service: neutron
+    region: "{{ region_name }}"
+    interface: admin
+    url: "{{ neutron_public_url }}"
+
+- name: ensure neutron internal endpoint
+  os_keystone_endpoint:
+    cloud: default
+    service: neutron
+    interface: internal
+    region: "{{ region_name }}"
+    url: "{{ neutron_public_url }}"

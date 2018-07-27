@@ -1,0 +1,8 @@
+---
+# this playbook install and config openstack glance.
+
+- include: mysql.yml
+- include: install.yml
+- include: config.yml
+- include: init.yml
+- include: restart.yml

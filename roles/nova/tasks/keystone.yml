@@ -1,0 +1,57 @@
+---
+- name: ensure nova project
+  os_project:
+    cloud: default
+    state: present
+    name: openstack
+    description: "openstack services"
+    domain_id: default
+    enabled: true
+
+- name: ensure nova user
+  os_user:
+    cloud: default
+    state: present
+    name: "{{ nova_os_username }}"
+    password: "{{ nova_os_password }}"
+    domain: default
+    default_project: openstack
+
+- name: ensure nova user is admin role
+  os_user_role:
+    cloud: default
+    user: "{{ nova_os_username }}"
+    role: "admin"
+    project: "openstack"
+
+- name: ensure nova service
+  os_keystone_service:
+    cloud: default
+    state: present
+    name: nova
+    service_type: compute
+    description: "OpenStack Compute Service"
+
+- name: ensure nova public endpoint
+  os_keystone_endpoint:
+    cloud: default
+    service: nova
+    interface: public
+    region: "{{ region_name }}"
+    url: "{{ nova_public_url }}"
+
+- name: ensure nova admin endpoint
+  os_keystone_endpoint:
+    cloud: default
+    service: nova
+    region: "{{ region_name }}"
+    interface: admin
+    url: "{{ nova_public_url }}"
+
+- name: ensure nova internal endpoint
+  os_keystone_endpoint:
+    cloud: default
+    service: nova
+    interface: internal
+    region: "{{ region_name }}"
+    url: "{{ nova_public_url }}"

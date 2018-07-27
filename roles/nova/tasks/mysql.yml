@@ -1,0 +1,29 @@
+---
+- name: ensure nova database is present
+  mysql_db:
+    name: "{{ item }}"
+  with_items:
+    - "nova"
+    - "nova_api"
+    - "nova_cell0"
+
+- name: ensure database grants
+  mysql_user:
+    name: nova
+    host: "{{ item[0] }}"
+    priv: "{{ item[1] }}.*:ALL"
+    append_privs: yes
+    password: "{{ nova_db_password }}"
+  with_nested:
+    - [ "localhost", "%" ]
+    - [ "nova", "nova_api", "nova_cell0" ]
+
+- name: ensure database is synchronized
+  command: "{{ item }}"
+  become: yes
+  become_user: nova
+  changed_when: false
+  with_items:
+    - "nova-manage api_db sync"
+    - "nova-manage cell_v2 simple_cell_setup"
+    - "nova-manage db sync"

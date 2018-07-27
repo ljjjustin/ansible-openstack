@@ -1,0 +1,35 @@
+---
+# This playbook install and config rabbitmq server.
+
+- name: Install rabbitmq server
+  yum: name={{ item }} state=present
+  with_items:
+    - erlang
+    - rabbitmq-server
+
+- name: Generate main configure
+  template:
+    src: rabbitmq.config.j2
+    dest: /etc/rabbitmq/rabbitmq.config
+    owner: rabbitmq
+    group: rabbitmq
+    mode: 0644
+  register: rabbitmq_config
+
+- name: Enable rabbitmq service
+  service: name=rabbitmq-server state=started enabled=yes
+
+- name: Restart rabbitmq if config changed
+  service: name=rabbitmq-server state=restarted
+  when: rabbitmq_config.changed == true
+
+- name: create admin user for openstack services
+  rabbitmq_user:
+    user: openstack
+    password: "{{ rabbitmq_password }}"
+    permissions:
+      - vhost: /
+        configure_priv: .*
+        read_priv: .*
+        write_priv: .*
+    state: present
