@@ -34,3 +34,45 @@
     name: openstack-nova-compute
     state: started
     enabled: yes
+
+- name: restart nova api if config changed
+  service:
+    name: openstack-nova-api
+    state: restarted
+  when: nova_config.changed == true
+
+- name: restart nova conductor if config changed
+  service:
+    name: openstack-nova-conductor
+    state: restarted
+  when: nova_config.changed == true
+
+- name: restart nova scheduler if config changed
+  service:
+    name: openstack-nova-scheduler
+    state: restarted
+  when: nova_config.changed == true
+
+- name: restart nova consoleauth if config changed
+  service:
+    name: openstack-nova-consoleauth
+    state: restarted
+  when: nova_config.changed == true
+
+- name: restart nova novncproxy if config changed
+  service:
+    name: openstack-nova-novncproxy
+    state: restarted
+  when: nova_config.changed == true
+
+- name: restart nova compute if config changed
+  service:
+    name: openstack-nova-compute
+    state: restarted
+  when: nova_config.changed == true
+
+- name: restart placement api if config changed
+  service:
+    name: httpd
+    state: restarted
+  when: nova_placement_config.changed == true

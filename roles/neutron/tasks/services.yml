@@ -28,3 +28,35 @@
     name: neutron-metadata-agent
     state: started
     enabled: yes
+
+# Handler for neutron notifications.
+
+- name: restart neutron server if config changed
+  service:
+    name: neutron-server
+    state: restarted
+  when: neutron_global_config.changed == true or neutron_plugin_config.changed == true
+
+- name: restart openvswitch agent if config changed
+  service:
+    name: neutron-openvswitch-agent
+    state: restarted
+  when: neutron_global_config.changed == true or neutron_ovs_agent_config.changed == true
+
+- name: restart DHCP agent if config changed
+  service:
+    name: neutron-dhcp-agent
+    state: restarted
+  when: neutron_global_config.changed == true or neutron_dhcp_agent_config.changed == true
+
+- name: restart L3 agent if config changed
+  service:
+    name: neutron-l3-agent
+    state: restarted
+  when: neutron_global_config.changed == true or neutron_l3_agent_config.changed == true
+
+- name: restart metadata agent if config changed
+  service:
+    name: neutron-metadata-agent
+    state: restarted
+  when: neutron_global_config.changed == true or neutron_metadata_agent_config.changed == true

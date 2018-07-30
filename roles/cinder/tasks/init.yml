@@ -1,0 +1,6 @@
+---
+- name: ensure database is synchronized
+  command: "cinder-manage db sync"
+  become: yes
+  become_user: cinder
+  changed_when: false

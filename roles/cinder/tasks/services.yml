@@ -10,3 +10,15 @@
     name: openstack-cinder-scheduler
     state: started
     enabled: yes
+
+- name: restart cinder api if config changed
+  service:
+    name: openstack-cinder-api
+    state: restarted
+  when: cinder_config.changed == true
+
+- name: restart cinder scheduler if config changed
+  service:
+    name: openstack-cinder-scheduler
+    state: restarted
+  when: cinder_config.changed == true

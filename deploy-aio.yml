@@ -9,8 +9,8 @@
     - mysql
     - memcached
     - rabbitmq
-    -  keystone
-    -  glance
-  # -  cinder
-  # -  neutron
-  # -  nova
+    - keystone
+    - glance
+    - cinder
+    - neutron
+    - nova

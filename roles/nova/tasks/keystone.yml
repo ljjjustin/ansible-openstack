@@ -24,6 +24,22 @@
     role: "admin"
     project: "openstack"
 
+- name: ensure placement user
+  os_user:
+    cloud: default
+    state: present
+    name: "{{ nova_placement_username }}"
+    password: "{{ nova_placement_password }}"
+    domain: default
+    default_project: openstack
+
+- name: ensure nova user is admin role
+  os_user_role:
+    cloud: default
+    user: "{{ nova_placement_username }}"
+    role: "admin"
+    project: "openstack"
+
 - name: ensure nova service
   os_keystone_service:
     cloud: default
@@ -37,6 +53,7 @@
     cloud: default
     service: nova
     interface: public
+    state: present
     region: "{{ region_name }}"
     url: "{{ nova_public_url }}"
 
@@ -44,8 +61,9 @@
   os_keystone_endpoint:
     cloud: default
     service: nova
-    region: "{{ region_name }}"
     interface: admin
+    state: present
+    region: "{{ region_name }}"
     url: "{{ nova_public_url }}"
 
 - name: ensure nova internal endpoint
@@ -53,5 +71,41 @@
     cloud: default
     service: nova
     interface: internal
+    state: present
     region: "{{ region_name }}"
     url: "{{ nova_public_url }}"
+
+- name: ensure nova placement service
+  os_keystone_service:
+    cloud: default
+    state: present
+    name: placement
+    service_type: placement
+    description: "OpenStack Placement API"
+
+- name: ensure placement public endpoint
+  os_keystone_endpoint:
+    cloud: default
+    service: placement
+    interface: public
+    state: present
+    region: "{{ region_name }}"
+    url: "{{ placement_public_url }}"
+
+- name: ensure placement admin endpoint
+  os_keystone_endpoint:
+    cloud: default
+    service: placement
+    interface: admin
+    state: present
+    region: "{{ region_name }}"
+    url: "{{ placement_public_url }}"
+
+- name: ensure placement internal endpoint
+  os_keystone_endpoint:
+    cloud: default
+    service: placement
+    interface: internal
+    state: present
+    region: "{{ region_name }}"
+    url: "{{ placement_public_url }}"

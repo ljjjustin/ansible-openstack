@@ -37,6 +37,7 @@
     cloud: default
     service: neutron
     interface: public
+    state: present
     region: "{{ region_name }}"
     url: "{{ neutron_public_url }}"
 
@@ -44,8 +45,9 @@
   os_keystone_endpoint:
     cloud: default
     service: neutron
-    region: "{{ region_name }}"
     interface: admin
+    state: present
+    region: "{{ region_name }}"
     url: "{{ neutron_public_url }}"
 
 - name: ensure neutron internal endpoint
@@ -53,5 +55,6 @@
     cloud: default
     service: neutron
     interface: internal
+    state: present
     region: "{{ region_name }}"
     url: "{{ neutron_public_url }}"

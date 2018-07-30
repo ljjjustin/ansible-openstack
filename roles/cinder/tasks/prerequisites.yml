@@ -1,0 +1,6 @@
+---
+# ensure database
+- include: mysql.yml
+
+# ensure openstack account
+- include: keystone.yml

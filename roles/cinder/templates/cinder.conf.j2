@@ -1,5 +1,6 @@
 [DEFAULT]
 # common configs
+my_ip = {{ default_my_ip }}
 debug = False
 use_syslog = False
 log_dir = /var/log/cinder
@@ -10,7 +11,6 @@ default_availability_zone = nova
 
 # api configs
 api_paste_config = /etc/cinder/api-paste.ini
-enable_v1_api = True
 enable_v2_api = True
 enable_v3_api = True
 osapi_volume_listen = 0.0.0.0
@@ -39,10 +39,14 @@ connection = mysql+pymysql://cinder:{{ cinder_db_password }}@{{ database_host }}
 
 [keystone_authtoken]
 auth_uri = http://{{ keystone_host }}:5000/
-admin_tenant_name=openstack
-admin_user={{ cinder_os_username }}
-admin_password={{ cinder_os_password }}
-identity_uri=http://{{ keystone_host }}:35357
+auth_url = http://{{ keystone_host }}:35357/
+memcached_servers = {{ memcached_host }}:11211
+auth_type = password
+project_domain_name = Default
+user_domain_name = Default
+project_name = openstack
+username = {{ cinder_os_username }}
+password = {{ cinder_os_password }}
 
 [oslo_concurrency]
 lock_path = /var/lib/cinder/tmp

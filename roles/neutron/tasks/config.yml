@@ -1,11 +1,19 @@
 ---
-- name: config neutron api paste
-  file:
-    src: /usr/share/neutron/api-paste.ini
-    dest: /etc/neutron/api-paste.ini
+- name: config neutron common
+  template:
+    src: neutron.conf.j2
+    dest: /etc/neutron/neutron.conf
     owner: neutron
     group: neutron
-    state: link
+  register: neutron_global_config
+
+- name: config neutron server
+  template:
+    src: ml2_conf.ini.j2
+    dest: /etc/neutron/plugins/ml2/ml2_conf.ini
+    owner: neutron
+    group: neutron
+  register: neutron_plugin_config
 
 - name: config neutron plugins
   file:
@@ -15,26 +23,13 @@
     group: neutron
     state: link
 
-- name: config neutron common
-  template:
-    src: neutron.conf.j2
-    dest: /etc/neutron/neutron.conf
-    owner: neutron
-    group: neutron
-
-- name: config neutron server
-  template:
-    src: ml2_conf.ini.j2
-    dest: /etc/neutron/plugins/ml2/ml2_conf.ini
-    owner: neutron
-    group: neutron
-
 - name: config neutron openvswitch agent
   template:
     src: openvswitch_agent.ini.j2
     dest: /etc/neutron/plugins/ml2/openvswitch_agent.ini
     owner: neutron
     group: neutron
+  register: neutron_ovs_agent_config
 
 - name: config neutron dhcp agent
   template:
@@ -42,6 +37,7 @@
     dest: /etc/neutron/dhcp_agent.ini
     owner: neutron
     group: neutron
+  register: neutron_dhcp_agent_config
 
 - name: config neutron l3 agent
   template:
@@ -49,6 +45,7 @@
     dest: /etc/neutron/l3_agent.ini
     owner: neutron
     group: neutron
+  register: neutron_l3_agent_config
 
 - name: config neutron metadata agent
   template:
@@ -56,3 +53,4 @@
     dest: /etc/neutron/metadata_agent.ini
     owner: neutron
     group: neutron
+  register: neutron_metadata_agent_config

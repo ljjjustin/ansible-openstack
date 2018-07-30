@@ -1,7 +1,16 @@
 ---
+- name: config nova placement api
+  copy:
+    src: 00-nova-placement-api.conf
+    dest: /etc/httpd/conf.d/
+    owner: root
+    group: root
+  register: nova_placement_config
+
 - name: config nova project
   template:
     src: nova.conf.j2
     dest: /etc/nova/nova.conf
     owner: nova
     group: nova
+  register: nova_config
