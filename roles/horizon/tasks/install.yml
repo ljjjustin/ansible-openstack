@@ -1,0 +1,7 @@
+---
+- name: install horizon
+  yum: name={{ item }} state=latest
+  with_items:
+    - httpd
+    - mod_wsgi
+    - openstack-dashboard

@@ -1,0 +1,23 @@
+---
+- name: config horizon service
+  copy:
+    src: openstack-dashboard.conf
+    dest: /etc/httpd/conf.d/
+    owner: root
+    group: root
+  register: httpd_config
+
+- name: config horizon service
+  template:
+    src: local_settings.j2
+    dest: /etc/openstack-dashboard/local_settings
+    owner: root
+    group: apache
+  register: dashboard_config
+
+- name: ensure apache server is started
+  service: name=httpd state=started enabled=yes
+
+- name: restart httpd if config changed
+  service: name=httpd state=restarted
+  when: dashboard_config.changed == true or httpd_config.changed == true

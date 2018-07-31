@@ -1,0 +1,5 @@
+---
+# this playbook install and config openstack horizon.
+
+- include: install.yml
+- include: config.yml
