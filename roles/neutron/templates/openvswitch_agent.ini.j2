@@ -14,5 +14,7 @@ enable_tunneling=True
 tunnel_bridge = br-tun
 local_ip = 127.0.0.1
 
+bridge_mappings = vlan:br-vlan,external:br-ex
+
 [securitygroup]
 firewall_driver = neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver

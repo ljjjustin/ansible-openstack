@@ -9,10 +9,10 @@ extension_drivers = port_security
 path_mtu = 0
 
 [ml2_type_flat]
-flat_networks = *
+flat_networks = external
 
 [ml2_type_vlan]
-network_vlan_ranges = physnet1:1000:1999
+network_vlan_ranges = vlan:1000:1999,external
 
 [ml2_type_vxlan]
 vni_ranges =20000:30000
