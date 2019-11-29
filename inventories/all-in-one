@@ -1,0 +1,174 @@
+[all]
+localhost       ansible_connection=local
+
+############################################
+# major groups
+############################################
+[control]
+localhost       ansible_connection=local
+
+[network]
+localhost       ansible_connection=local
+
+[compute]
+localhost       ansible_connection=local
+
+[storage]
+localhost       ansible_connection=local
+
+[monitoring]
+localhost       ansible_connection=local
+
+############################################
+# basic projects
+############################################
+[haproxy:children]
+control
+
+[memcached:children]
+control
+
+[mariadb:children]
+control
+
+[rabbitmq:children]
+control
+
+[openvswitch:children]
+network
+compute
+
+############################################
+# OpenStack dashboard
+############################################
+[horizon:children]
+control
+
+############################################
+# Keystone project
+############################################
+[keystone:children]
+control
+
+############################################
+# Glance project
+############################################
+[glance:children]
+control
+
+[glance-api:children]
+glance
+
+[glance-registry:children]
+glance
+
+############################################
+# Nova project
+############################################
+[nova:children]
+control
+
+[nova-api:children]
+nova
+
+[nova-placement-api:children]
+nova
+
+[nova-conductor:children]
+nova
+
+[nova-scheduler:children]
+nova
+
+[nova-consoleauth:children]
+nova
+
+[nova-novncproxy:children]
+nova
+
+[nova-serialproxy:children]
+nova
+
+[nova-spicehtml5proxy:children]
+nova
+
+[nova-compute:children]
+compute
+
+############################################
+# Neutron project
+############################################
+[neutron:children]
+network
+
+[neutron-server:children]
+control
+
+[neutron-dhcp-agent:children]
+neutron
+
+[neutron-l3-agent:children]
+neutron
+
+[neutron-lbaas-agent:children]
+neutron
+
+[neutron-metadata-agent:children]
+neutron
+
+############################################
+# Ceph storage
+############################################
+[ceph-mon:children]
+ceph
+
+[ceph-rgw:children]
+ceph
+
+[ceph-mds:children]
+ceph
+
+[ceph-osd:children]
+storage
+
+############################################
+# Cinder
+############################################
+[cinder:children]
+control
+
+[cinder-api:children]
+cinder
+
+[cinder-scheduler:children]
+cinder
+
+[cinder-volume:children]
+storage
+
+# iSCSI
+[iscsid:children]
+compute
+storage
+ironic
+
+[tgtd:children]
+storage
+
+############################################
+# Ironic project
+############################################
+[ironic-api:children]
+ironic
+
+[ironic-conductor:children]
+ironic
+
+[ironic-inspector:children]
+ironic
+
+[ironic-pxe:children]
+ironic
+
+[ironic-ipxe:children]
+ironic

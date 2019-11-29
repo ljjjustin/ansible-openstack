@@ -1,0 +1,71 @@
+---
+- name: Gather facts for all hosts
+  gather_facts: false
+  hosts: all
+  serial: '{{ default_serial|default("0") }}'
+  tasks:
+    - setup:
+  tags: always
+
+- name: Apply basic role
+  gather_facts: false
+  hosts: all
+  serial: '{{ default_serial|default("0") }}'
+  roles:
+    - role: basic
+  tags: basic
+
+- name: Apply role haproxy
+  gather_facts: false
+  hosts:
+    - haproxy
+  roles:
+    - { role: haproxy,
+        tags: haproxy,
+        when: enable_haproxy | bool }
+
+- name: Apply role memcached
+  gather_facts: false
+  hosts: memcached
+  roles:
+    - { role: mysql,
+        tags: mysql,
+        when: enable_mysql | bool }
+
+- name: Apply role rabbitmq
+  gather_facts: false
+  hosts: rabbitmq
+  roles:
+    - { role: rabbitmq,
+        tags: rabbitmq,
+        when: enable_rabbitmq | bool }
+
+- name: Apply role keystone
+  gather_facts: false
+  hosts: control
+    - keystone
+
+- name: Apply role glance
+  gather_facts: false
+  hosts: control
+    - glance
+
+- name: Apply role cinder
+  gather_facts: false
+  hosts: control
+    - cinder
+
+- name: Apply role neutron
+  gather_facts: false
+  hosts: control
+    - neutron
+
+- name: Apply role nova
+  gather_facts: false
+  hosts: control
+    - nova
+
+- name: Apply role horizon
+  gather_facts: false
+  hosts: control
+    - horizon
